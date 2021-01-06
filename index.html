@@ -1,0 +1,336 @@
+<html>
+
+<head>
+  <title>Gene Drive Simulation</title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Roboto:400,700|Material+Icons">
+
+  <style type="text/css">
+    * {
+      padding: 0;
+      margin: 0;
+      font-family: "Roboto", sans-serif;
+      outline: none;
+    }
+
+    .nav {
+      width: 100%;
+      box-shadow: 0 0.2rem 0.4rem rgba(0,0,0,.23);
+      margin-bottom: 10px;
+    }
+
+    .nav > div {
+      display: flex;
+      padding: 18px;
+      align-items: center;
+      font-size: 35px;
+      font-weight: bold;
+    }
+
+    .main {
+      background: rgb(250, 250, 250);
+      padding: 20px;
+    }
+
+    .inputs {
+      width: 30%;
+      padding: 20px;
+      background: rgb(240, 240, 240);
+    }
+
+    .inputs > div {
+      display: flex;
+      justify-content: space-between;
+      margin: 3px 6px;
+    }
+
+    .inputs > div > input {
+      border: 1px solid #ccc;
+      border-radius: 2px;
+      padding: 4px;
+      font-size: 14px;
+    }
+
+    .inputs > div > input:focus {
+      border-color: rgb(99, 200, 217);
+    }
+
+    .inputs button {
+      padding: 10px 12px;
+      border-radius: 4px;
+      background: rgb(99, 200, 217);
+      color: black;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 14px;
+      display: block;
+      margin: auto;
+      margin-top: 18px;
+    }
+
+    .inputs button:hover {
+      transform: scale(1.05);
+    }
+
+    .graphs {
+      width: 60%;
+      height: 300vh;
+    }
+
+    .material-icons {
+      vertical-align: middle;
+    }
+
+    /* hover stuff */
+    .hoverable {
+      margin: 0 !important;
+      cursor: default;
+    }
+    .hoverable + div {
+      opacity: 0;
+      box-shadow: 2px 0px 3px 0px rgba(0,0,0,0.17), 0px 3px 3px 0px rgba(0,0,0,0.17);
+      min-height: 0;
+      min-width: 0;
+      border-radius: 5px;
+      display: block;
+      position: absolute;
+      z-index: -5;
+      padding: 10px;
+      background: white;
+      transition: opacity .2s ease;
+      font-size: 14px;
+      width: 250px;
+      border: 2px solid rgb(99, 200, 217);
+    }
+    .hoverable:hover + div {
+      opacity: 1;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <div>
+      <!-- <span>Gene Drive Simulator</span> -->
+      <img src="img/logo.png" style="height: 70px;">
+    </div>
+  </div>
+  <div class="main">
+    <p>Our goal for this project it to make gene drive math and algorithms easily accessible for all to use, so we have built this GUI implementation of Richard Grewelle's gene drive algorithm mentioned in ___ paper. Blah blah blah idk some other words</p>
+  </div>
+  <div style="display: flex;">
+    <div class="inputs">
+      <div>
+        <div>
+          <label for="sAAinput">Native Homozygote</label>
+          <div style="display: inline-block;">
+            <p class="hoverable"><i class="material-icons">help</i></p>
+            <div>Starting population size of native homozygote genotype (AA). The native allele is an allele not targeted to spread in the population via gene drive.</div>
+          </div>
+        </div>
+        <input type="number" id="sAAinput" value="99">
+      </div>
+      <div>
+        <div>
+          <label for="sABinput">Native-Target Heterozygote</label>
+          <div style="display: inline-block;">
+            <p class="hoverable"><i class="material-icons">help</i></p>
+            <div>Starting population size of native-target heterozygote genotype (AB). The target allele is an allele existing in the population targeted to spread via gene drive.</div>
+          </div>
+        </div>
+        <input type="number" id="sABinput" value="0.000001">
+      </div>
+      <div>
+        <div>
+          <label for="sBBinput">Target Homozygote</label>
+          <div style="display: inline-block;">
+            <p class="hoverable"><i class="material-icons">help</i></p>
+            <div>Starting population size of target genotype (BB).</div>
+          </div>
+        </div>
+        <input type="number" id="sBBinput" value="0.000001"> 
+      </div>
+      <div>
+        <div>
+          <label for="sABginput">Native-Engineered Heterozygote</label>
+          <div style="display: inline-block;">
+            <p class="hoverable"><i class="material-icons">help</i></p>
+            <div>Starting population size of native-engineered heterozygote genotype (ABg). The engineered allele is the same as the target allele equipped with the gene drive mechanism.</div>
+          </div>
+        </div>
+        <input type="number" id="sABginput" value="0.000001">
+      </div>
+      <div>
+        <div>
+          <label for="sBBginput">Target-Engineered Heterozygote</label>
+          <div style="display: inline-block;">
+            <p class="hoverable"><i class="material-icons">help</i></p>
+            <div>Starting population size of the target-engineered heterozygote genotype (BBg).</div>
+          </div>
+        </div>
+        <input type="number" id="sBBginput" value="0.000001">
+      </div>
+      <div>
+        <div>
+          <label for="sBgBginput">Engineered Homozygote</label>
+          <div style="display: inline-block;">
+            <p class="hoverable"><i class="material-icons">help</i></p>
+            <div>Starting population size of the engineered homozygote genotype (BgBg).  These are likely the genotypes of introduced organisms.</div>
+          </div>
+        </div>
+        <input type="number" id="sBgBginput" value="1">
+      </div>
+      <div>
+        <div>
+          <label for="siginput">Self-fertilization Frequency</label>
+          <div style="display: inline-block;">
+            <p class="hoverable"><i class="material-icons">help</i></p>
+            <div>The proportion of the population that reproduces via self-fertilization in a given generation.  This is not the same as the proportion of offspring produced via self-fertlization, as this value does not reflect costs associated with self-fertilization.</div>
+          </div>
+        </div>
+        <input type="number" id="siginput" value="0.5">
+        <!-- <input type="range" id="siginput" min="0" max="1" value="0.5" step="0.01"> -->
+      </div>
+      <div>
+        <div>
+          <label for="carCapinput">Carrying Capacity</label>
+          <div style="display: inline-block;">
+            <p class="hoverable"><i class="material-icons">help</i></p>
+            <div>The estimated carrying capacity in the population in percent</div>
+          </div>
+        </div>
+        <input type="number" id="carCapinput" value="100"> 
+      </div>
+      <div>
+        <div>
+          <label for="growthRateinput">Max Reproduction</label>
+          <div style="display: inline-block;">
+            <p class="hoverable"><i class="material-icons">help</i></p>
+            <div>The intrinsic growth rate per generation per individual. This is the maximum number of offspring produced without density-dependent limits on population growth.</div>
+          </div>
+        </div>
+        <input type="number" id="growthRateinput" value="40">
+      </div>
+      <div>
+        <div>
+          <label for="inbrinput">Inbreeding Cost</label>
+          <div style="display: inline-block;">
+            <p class="hoverable"><i class="material-icons">help</i></p>
+            <div>The fecundity cost associated with inbreeding in the population, values between [0,1].</div>
+          </div>
+        </div>
+        <input type="number" id="inbrinput" value="0.7"> 
+      </div>
+      <div>
+        <div>
+          <label for="muinput">Natural Death Rate</label>
+          <div style="display: inline-block;">
+            <p class="hoverable"><i class="material-icons">help</i></p>
+            <div>The proportion of individuals that die in a generation as defined by the interval of time from birth to reproductive maturity, values between [0,1].</div>
+          </div>
+        </div>
+        <input type="number" id="muinput" value="0.2"> 
+      </div>
+      <div>
+        <div>
+          <label for="epsinput">Migration Rate</label>
+          <div style="display: inline-block;">
+            <p class="hoverable"><i class="material-icons">help</i></p>
+            <div>The proportion of individuals that emigrate from the population and are replaced by a natural outside source via immigration, values between [0,1].</div>
+          </div>
+        </div>
+        <input type="number" id="epsinput" value="0">
+      </div>
+      <div>
+        <div>
+          <label for="rhoinput">Selection Coefficient</label>
+          <div style="display: inline-block;">
+            <p class="hoverable"><i class="material-icons">help</i></p>
+            <div>The selection pressure in favor of the target allele, values between [-1,1]</div>
+          </div>
+        </div>
+        <input type="number" id="rhoinput" value="0.2">
+      </div>
+      <div>
+        <div>
+          <label for="betainput">Cost of Target</label>
+          <div style="display: inline-block;">
+            <p class="hoverable"><i class="material-icons">help</i></p>
+            <div>The cost of maintaining the target allele in the absence of positive selection, values between [0,1]. Leave at default = 0 if the relative fitness is constant throughout the simulation.</div>
+          </div>
+        </div>
+        <input type="number" id="betainput" value="0.2"> 
+      </div>
+      <div>
+        <div>
+          <label for="gammainput">Dominance Coefficient</label>
+          <div style="display: inline-block;">
+            <p class="hoverable"><i class="material-icons">help</i></p>
+            <div>The dominance of target allele B over native allele A, values between [0,1].</div>
+          </div>
+        </div>
+        <input type="number" id="gammainput" value="1">
+      </div>
+      <div>
+        <div>
+          <label for="xiinput">Target Penetrance</label>
+          <div style="display: inline-block;">
+            <p class="hoverable"><i class="material-icons">help</i></p>
+            <div>The expression of the target phenotype as a proportion of full expression, values between [0,1].</div>
+          </div>
+        </div>
+        <input type="number" id="xiinput" value="0.8"> 
+      </div>
+      <div>
+        <div>
+          <label for="efficiencyinput">Gene Drive Efficacy</label>
+          <div style="display: inline-block;">
+            <p class="hoverable"><i class="material-icons">help</i></p>
+            <div>The efficacy of the gene drive homing mechanism, values between [0,1].</div>
+          </div>
+        </div>
+        <input type="number" id="efficiencyinput" value="0.9"> 
+      </div>
+      <div>
+        <div>
+          <label for="beta_ginput">Gene Drive Cost</label>
+          <div style="display: inline-block;">
+            <p class="hoverable"><i class="material-icons">help</i></p>
+            <div>The cost of maintaining the gene drive allele, values between [0,1].</div>
+          </div>
+        </div>
+        <input type="number" id="beta_ginput" value="0.1"> 
+      </div>
+      <div>
+        <div>
+          <label for="gensinput">Simulated Generations</label>
+          <div style="display: inline-block;">
+            <p class="hoverable"><i class="material-icons">help</i></p>
+            <div>The number of generations to simulate.</div>
+          </div>
+        </div>
+        <input type="number" id="gensinput" value="40">
+      </div>
+      <button onclick="calculate()">Calculate</button>
+    </div>
+    <div class="graphs">
+      <h1 id="loadingmsg" style="display: none;">Crunching the numbers...</h1>
+      <canvas id="susceptiblePlot"></canvas>
+      <canvas id="heterozygousResistantPlot"></canvas>
+      <canvas id="homozygousResistantPlot"></canvas>
+      <canvas id="ABgPlot"></canvas>
+      <canvas id="BBgPlot"></canvas>
+      <canvas id="geneDrivePlot"></canvas>
+      <canvas id="allPlot"></canvas>
+    </div>
+  </div>
+
+  <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.1.2/dist/tf.min.js"></script> -->
+  <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script> -->
+  <script type="text/javascript" src="/js/tf.js"></script>
+  <script type="text/javascript" src="/js/chart.js"></script>
+  <script type="text/javascript" src="/js/main.js"></script>
+</body>
+
+</html>
